@@ -41,10 +41,10 @@ pipeline {
         stage('push docker image') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'dockerhub_token', variable: 'dockerhub_token')]) {
-                        bat 'docker login -u amitchavda00 -p ${dockerhub_token}'
+                    //withCredentials([string(credentialsId: 'dockerhub_token', variable: 'dockerhub_token')]) {
+                        //bat 'docker login -u amitchavda00 -p ${dockerhub_token}'
                         bat 'docker push amitchavda00/spring-crud-jenkins-pipeline:latest'
-                    }
+                    //}
                 }
             }
         }
