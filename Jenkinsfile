@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+    }
     triggers {
         pollSCM('*/1 * * * *')
     }
@@ -9,7 +12,7 @@ pipeline {
 
     stages {
         stage('Clone and Checkout') {
-            steps{
+            steps {
                 git 'https://github.com/Amit-Chavda/spring-crud-jenkins-pipeline.git'
             }
         }
@@ -20,18 +23,43 @@ pipeline {
         }
         stage('Test') {
             steps {
-                bat "mvn clean test"
+                bat "mvn test"
             }
         }
-        stage('Package'){
-            steps{
-                bat "mvn clean package"
+        stage('Package') {
+            steps {
+                bat "mvn package"
             }
         }
-        stage('Install'){
-            steps{
-                bat "mvn clean install"
+        stage('Install') {
+            steps {
+                bat "mvn install"
             }
+        }
+
+        stage('build docker image') {
+            steps {
+                bat 'docker build -t amitchavda00/spring-crud-jenkins-pipeline:latest .'
+            }
+        }
+        stage('login dockerhub') {
+
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+
+        stage('Push') {
+
+            steps {
+                sh 'docker push amitchavda00/spring-crud-jenkins-pipeline:latest'
+            }
+        }
+
+    }
+    post {
+        always {
+            sh 'docker logout'
         }
     }
 }
