@@ -59,10 +59,5 @@ pipeline {
                 sh 'docker push amitchavda00/spring-crud-jenkins-pipeline:latest'
             }
         }
-        post {
-            always {
-                sh 'docker logout'
-            }
-        }
     }
 }
