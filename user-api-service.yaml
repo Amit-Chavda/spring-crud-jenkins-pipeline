@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  user-api
+  namespace: default
+  labels:
+    app:  user-api
+spec:
+  selector:
+    matchLabels:
+      app: user-api
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app:  user-api
+    spec:
+      containers:
+      - name:  user-api
+        image:  amitchavda00/spring-crud-jenkins-pipeline:tagname:latest
+        ports:
+        - containerPort:  8081
+          name:  user-api
+        imagePullPolicy: Always
+      
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-api-service
+  namespace: default
+spec:
+  selector:
+    app: user-api
+  type: ClusterIP
+  ports:
+  - name: user-api-service
+    protocol: TCP
+    port: 8085
+    targetPort: 8081
