@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name:  user-api
-        image:  amitchavda00/spring-crud-jenkins-pipeline:tagname:latest
+        image:  amitchavda00/spring-crud-jenkins-pipeline:latest
         ports:
         - containerPort:  8081
           name:  user-api
